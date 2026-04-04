@@ -1,0 +1,18 @@
+# ─── Secrets & Generated Config ───
+config-snippets/rt-training.env
+config-snippets/*.generated.json
+openclaw.json
+
+# ─── Session Data (may contain sensitive findings) ───
+sessions/*/
+
+# ─── OS / Editor ───
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ─── OpenClaw runtime ───
+.openclaw/

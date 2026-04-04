@@ -1,0 +1,47 @@
+{
+  "session_id": "REPLACE_SESSION_ID",
+  "scenario": "REPLACE_SCENARIO_ID",
+  "started_at": "",
+  "ended_at": "",
+  "timebox_minutes": 180,
+
+  "scope": {
+    "targets": [],
+    "allowed_actions": [],
+    "forbidden_actions": ["out-of-scope scanning", "destructive writes", "production access"]
+  },
+
+  "current_phase": "kickoff",
+
+  "phases": [
+    { "name": "kickoff",  "status": "pending", "owner": "rt-lead",    "started_at": "", "ended_at": "" },
+    { "name": "recon",    "status": "pending", "owner": "rt-recon",   "started_at": "", "ended_at": "" },
+    { "name": "webops",   "status": "pending", "owner": "rt-webops",  "started_at": "", "ended_at": "" },
+    { "name": "access",   "status": "pending", "owner": "rt-access",  "started_at": "", "ended_at": "" },
+    { "name": "debrief",  "status": "pending", "owner": "rt-debrief", "started_at": "", "ended_at": "" }
+  ],
+
+  "handoffs": [],
+
+  "findings": [],
+
+  "hints_used": 0,
+  "penalties": 0,
+
+  "score": {
+    "recon_quality": 0,
+    "exploit_reproducibility": 0,
+    "impact_proof": 0,
+    "evidence_quality": 0,
+    "defensive_recommendations": 0,
+    "time_discipline": 0,
+    "total": 0
+  },
+
+  "metrics": {
+    "phase_durations_minutes": {},
+    "handoff_count": 0,
+    "findings_count": 0,
+    "time_remaining_minutes": 180
+  }
+}

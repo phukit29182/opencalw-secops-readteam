@@ -1,0 +1,66 @@
+{
+  "gateway": {
+    "host": "0.0.0.0",
+    "port": 3310,
+    "auth": {
+      "enabled": true,
+      "token": "REPLACE_OPENCLAW_GATEWAY_TOKEN"
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "pollIntervalMs": 1200,
+      "accounts": {
+        "main": {
+          "token": "REPLACE_TELEGRAM_BOT_TOKEN_MAIN",
+          "groups": {
+            "-100REPLACE_TRAINING_GROUP_ID": {
+              "groupPolicy": "allowlist",
+              "requireMention": false,
+              "allowFrom": [
+                "REPLACE_TRAINER_USER_ID"
+              ],
+              "topics": {
+                "REPLACE_TOPIC_ID_LEAD": {
+                  "agentId": "rt-lead"
+                },
+                "REPLACE_TOPIC_ID_RECON": {
+                  "agentId": "rt-recon"
+                },
+                "REPLACE_TOPIC_ID_WEBOPS": {
+                  "agentId": "rt-webops"
+                },
+                "REPLACE_TOPIC_ID_ACCESS": {
+                  "agentId": "rt-access"
+                },
+                "REPLACE_TOPIC_ID_DEBRIEF": {
+                  "agentId": "rt-debrief"
+                }
+              }
+            }
+          }
+        }
+      },
+      "bindings": [
+        {
+          "accountId": "main",
+          "chatType": "private",
+          "agentId": "rt-lead"
+        }
+      ]
+    }
+  },
+  "tools": {
+    "agentToAgent": {
+      "enabled": true
+    },
+    "exec": {
+      "enabled": true,
+      "security": "full"
+    }
+  },
+  "logging": {
+    "level": "info"
+  }
+}
