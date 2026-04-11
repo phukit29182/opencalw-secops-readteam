@@ -91,9 +91,17 @@ for raw in env_path.read_text(encoding="utf-8").splitlines():
     if not line or line.startswith("#"):
         continue
     if "=" not in line:
-        raise SystemExit(f"Invalid env line: {raw}")
+        continue
     k, v = line.split("=", 1)
     values[k.strip()] = v.strip()
+
+# --- Auto-resolve Agent Paths ---
+root_path = pathlib.Path(sys.argv[1]).parent.parent
+values["REPLACE_PATH_RT_LEAD"] = str(root_path / "agents" / "rt-lead")
+values["REPLACE_PATH_RT_RECON"] = str(root_path / "agents" / "rt-recon")
+values["REPLACE_PATH_RT_WEBOPS"] = str(root_path / "agents" / "rt-webops")
+values["REPLACE_PATH_RT_ACCESS"] = str(root_path / "agents" / "rt-access")
+values["REPLACE_PATH_RT_DEBRIEF"] = str(root_path / "agents" / "rt-debrief")
 
 missing = [k for k in required_keys if not values.get(k)]
 if missing:

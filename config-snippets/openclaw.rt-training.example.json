@@ -1,4 +1,11 @@
 {
+  "agents": {
+    "rt-lead": "REPLACE_PATH_RT_LEAD",
+    "rt-recon": "REPLACE_PATH_RT_RECON",
+    "rt-webops": "REPLACE_PATH_RT_WEBOPS",
+    "rt-access": "REPLACE_PATH_RT_ACCESS",
+    "rt-debrief": "REPLACE_PATH_RT_DEBRIEF"
+  },
   "gateway": {
     "host": "0.0.0.0",
     "port": 3310,
