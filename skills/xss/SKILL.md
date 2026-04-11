@@ -1,7 +1,73 @@
 ---
 name: xss
-description: การทดสอบช่องโหว่ Cross-Site Scripting (XSS) ในฝั่ง Client-Side Application สำหรับ Web API / Frontend
+description: การทดสอบช่องโหว่ Cross-Site Scripting ด้วย Jason Haddix XSS Hunting Pipeline (ParamSpider → Gxss → dalfox) สอดคล้องกับ OWASP A03:2021 และ ISO 27001
 ---
+
+# SKILL: xss
+
+## Purpose
+ตรวจสอบหาช่องโหว่ **Cross-Site Scripting (Reflected, Stored, DOM-based)** ด้วย Automated Hunting Pipeline ตาม **OWASP Top 10 (A03:2021-Injection)** — MITRE ATT&CK **T1059.007** (JavaScript Execution) การทดสอบใช้ Safe Payload เสมอ
+
+## Focus Areas
+- **Target:** Web Frontend, User Inputs, Query Parameters, API JSON Responses
+- **Frameworks:** OWASP A03:2021 (Injection), ISO 27001 (Protection from Malicious Code), MITRE T1059.007
+- **Tooling:** `ParamSpider`, `Gxss`, `dalfox`, `waybackurls`, `Burp Suite`, `nuclei` (-t xss/)
+
+## Required Inputs
+- `domain`: Target domain หลัก
+- `params_file`: ไฟล์ params ที่ได้จาก `web-discovery` (`params.txt`)
+- `timebox_minutes`: กำหนดเวลาสูงสุด
+
+## Workflow
+
+### Phase 1: Parameter Extraction
+```bash
+# จาก params.txt ที่ rt-recon ส่งมาแล้ว หรือขุดเพิ่มด้วย ParamSpider
+python3 paramspider.py --domain $DOMAIN -o paramspider_out.txt
+
+# รวมกับ waybackurls ที่มีอยู่
+cat paramspider_out.txt params.txt | sort -u > all_params.txt
+```
+
+### Phase 2: Reflection Pre-filter (Gxss)
+```bash
+# กรอง params ที่ reflect input กลับมาในหน้า
+cat all_params.txt | Gxss -p "test123" | tee reflected_params.txt
+```
+
+### Phase 3: Automated XSS Testing (dalfox)
+```bash
+# dalfox pipe mode — ทดสอบเฉพาะ reflected params
+cat reflected_params.txt | dalfox pipe \
+  --mining-dict all_params.txt \
+  --silence \
+  -o xss_results.txt
+
+# ทดสอบ endpoint เดี่ยว
+dalfox url "https://target.com/search?q=test" --silence
+```
+
+### Phase 4: Nuclei XSS Templates
+```bash
+nuclei -l live_hosts.txt -t vulnerabilities/xss/ -o nuclei_xss.txt
+```
+
+### Phase 5: Manual Validation (Burp Suite)
+- ใช้ Burp Repeater ยืนยัน False Positive
+- ทดสอบ WAF Bypass ด้วย encoding: `%3Cscript%3E`, `\u003cscript\u003e`
+- ตรวจ DOM-based XSS ใน JavaScript source
+
+## Output Contract
+- `xss_results.txt` — Confirmed XSS endpoints จาก dalfox
+- PoC Payload ที่ reproduce ได้ (Safe: `alert(document.domain)`)
+- OWASP A03:2021 + MITRE T1059.007 mapping
+- Recommendation: CSP Header, Input Sanitization, Output Encoding
+
+## Safety Guardrails
+- **Safe Payload Only:** ใช้เฉพาะ `alert()`, `console.log()` — ห้ามใช้ payload ที่ exfiltrate session token จริง
+- **No Stored XSS on Shared Areas:** ห้าม inject บน production ที่ user อื่นใช้งานจริง — ต้องใช้ test account แยก
+- **Rate Limit:** dalfox ใช้ `--delay` / `--timeout` เพื่อไม่ให้เกิด DoS
+
 
 # SKILL: xss
 

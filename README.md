@@ -1,7 +1,7 @@
 # OpenClaw SecOps — Web/API Security Assessment Kit
 
 ชุดเครื่องมือสำหรับ **ประเมินความปลอดภัย Web Application และ API** บน OpenClaw (Local Only)
-ออกแบบให้ AI Agents 5 ตัวทำงานร่วมกันตามมาตรฐาน **OWASP Top 10** และ **ISO 27001** ควบคุมผ่าน Telegram Forum Topics ใช้เครื่องมือจาก **Kali Linux**
+ออกแบบให้ AI Agents 5 ตัวทำงานร่วมกันตามมาตรฐาน **OWASP Top 10**, **MITRE ATT&CK** และ **ISO 27001** ควบคุมผ่าน Telegram Forum Topics ใช้เครื่องมือจาก **Kali Linux**
 
 ---
 
@@ -10,7 +10,7 @@
 - ใช้ `rt-*` agents แยกบทบาทชัดเจน (lead / recon / webops / access / debrief)
 - ใช้ Telegram Topics เป็น Command Center
 - เจาะเฉพาะ Authorized Target ที่ได้รับอนุญาตเท่านั้น (ISO 27001 Compliance)
-- ผลลัพธ์ทุกชิ้นต้องผูกกับ **OWASP Top 10** Category
+- ผลลัพธ์ทุกชิ้นต้องผูกกับ **OWASP Top 10** หรือ **MITRE ATT&CK**
 - ใช้เครื่องมือจาก **Kali Linux** ในทุกขั้นตอน
 
 ---
@@ -19,24 +19,24 @@
 
 ```
                      rt-lead
-              (ISO 27001 Scope Control)
+              (ISO 27001 / MITRE Lifecycle Control)
                    /    |    \
                   v     v     v
             rt-recon  rt-webops  rt-access
-          (Kali Recon) (OWASP PoC) (CIA Impact)
+          (Jason Haddix) (OWASP PoC) (TA0004 / TA0008)
                   \     |     /
                    v    v    v
                    rt-debrief
-              (Report + Mitigation)
+              (Detection Gaps / Scoring)
 ```
 
 | Agent | หน้าที่ | เครื่องมือหลัก |
 |-------|---------|---------------|
-| `rt-lead` | ควบคุม Scope, Phase, Approval | OpenClaw CLI |
-| `rt-recon` | Asset Discovery, Attack Paths | nmap, gobuster, ffuf |
-| `rt-webops` | OWASP PoC (SQLi, XSS, IDOR, SSRF, JWT) | sqlmap, Burp, jwt_tool |
-| `rt-access` | C-I-A Impact Assessment | impacket, netexec |
-| `rt-debrief` | OWASP Report + ISO 27001 Scoring | Evidence Analysis |
+| `rt-lead` | ควบคุม Scope, Phase, Approval, MITRE Lifecycle | OpenClaw CLI |
+| `rt-recon` | Jason Haddix Recon Pipeline (Subdomains, Params) | amass, subfinder, httpx, gau |
+| `rt-webops` | OWASP Validation, App Analysis Heat Map | sqlmap, Burp, dalfox, nuclei |
+| `rt-access` | PrivEsc (TA0004), Lateral Movement (TA0008) | impacket, netexec, linpeas |
+| `rt-debrief` | OWASP/MITRE Mapping, Detection Gaps | Evidence Analysis |
 
 ---
 
@@ -113,35 +113,33 @@ openclaw channels status --probe
 
 | Topic | Agent | บทบาท |
 |-------|-------|-------|
-| `General` | `rt-lead` | ISO 27001 Scope Control |
-| `01-Recon` | `rt-recon` | Kali Discovery |
-| `02-WebOps` | `rt-webops` | OWASP Validation |
-| `03-Access` | `rt-access` | C-I-A Impact |
-| `04-Debrief` | `rt-debrief` | Report + Score |
+| `General` | `rt-lead` | ISO 27001 Scope Control / Timebox |
+| `01-Recon` | `rt-recon` | Jason Haddix Recon Pipeline |
+| `02-WebOps` | `rt-webops` | OWASP Validation / App Heat Map |
+| `03-Access` | `rt-access` | PrivEsc / Lateral Movement Impact |
+| `04-Debrief` | `rt-debrief` | Report + Detection Gaps + Score |
 
 ดูการตั้งค่า Telegram: [docs/REDTEAM_TRAINING_TELEGRAM_TH.md](docs/REDTEAM_TRAINING_TELEGRAM_TH.md)
 
 ---
 
-## Skills (OWASP Top 10 Mapped)
+## Skills (OWASP / MITRE ATT&CK Mapped)
 
-| Skill | OWASP | Target |
-|-------|-------|--------|
-| `sql-injection-*` | A03:2021 | Web/API |
-| `xss` | A03:2021 (Client) | Frontend |
-| `idor` | A01:2021 | Web/API |
-| `ssrf` | A10:2021 | Backend |
-| `jwt-auth` | A07:2021 | Auth |
-| `mass-assignment` | API3:2023 | API |
-| `rate-limit-bypass`| API4:2023 | API |
-| `bfla` | API5:2023 | API |
-| `api-schema-valid` | API8:2023 | API |
-| `graphql-intro` | API9:2023 | API |
-| `web-discovery` | Recon | All |
-| `network-recon` | Asset ID | Infrastructure |
-| `retrospective` | Reporting | All |
+| Skill | Category | Framework Target |
+|-------|----------|----------------|
+| `web-discovery` | Recon | MITRE TA0043 / Jason Haddix |
+| `network-recon` | Recon | MITRE TA0043 |
+| `sql-injection-*` | Exploit | OWASP A03:2021 |
+| `xss` | Exploit | MITRE T1059.007 / ParamSpider Pipeline |
+| `idor` | Exploit | OWASP A01:2021 |
+| `ssrf` | Exploit | OWASP A10:2021 |
+| `jwt-auth` | Auth | OWASP A07:2021 |
+| `api-schema-valid` | API | OWASP API8:2023 |
+| `priv-escalation` | Access | MITRE TA0004 |
+| `lateral-movement` | Access | MITRE TA0008 |
+| `retrospective` | Debrief | ISO 27001 / Detection Gaps |
 
-- ดูตาราง Scenario ↔ Skills: [skills/INDEX.md](skills/INDEX.md)
+- ดูตาราง Scenario ↔ Skills ทั้งหมด (17 Skills): [skills/INDEX.md](skills/INDEX.md)
 - Prompt snippets: [skills/PROMPTS.md](skills/PROMPTS.md)
 
 ---
@@ -178,5 +176,6 @@ sessions/<session-id>/session_state.json
 - ✅ ใช้เฉพาะ Authorized Target ที่ได้รับอนุญาต (ISO 27001)
 - ✅ ห้ามโจมตีระบบ Production
 - ✅ Action เสี่ยงสูงต้องใช้ `#approve`
-- ✅ ทุก PoC ต้องผูก OWASP Top 10 Category
-- ✅ บันทึกหลักฐานและปิด Debrief ทุก Session
+- ✅ ทุก PoC ต้องผูก OWASP Top 10 หรือ MITRE ATT&CK
+- ✅ วิเคราะห์ Detection Gaps เมื่อจบ Assessment เสมอ
+
