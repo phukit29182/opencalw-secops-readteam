@@ -5,14 +5,14 @@ Agent: rt-access
 Scenario: <scenario-id>
 
 ## Approval Gate
-- Action requested:
+- Action requested (e.g. Pass-the-Hash, SUID exploit):
 - Approved by (`#approve`):
 - Time approved:
 
-## Access Chain
-- Initial foothold:
-- Privilege obtained:
-- Impact proof:
+## MITRE ATT&CK Chain
+- T-Code: [Initial foothold]
+- T-Code: [Privilege Esc / Lateral Movement]
+- T-Code: [Defense Evasion]
 
 ## Safety Validation
 - Action is reversible:
@@ -20,5 +20,5 @@ Scenario: <scenario-id>
 - Scope re-confirmed:
 
 ## Handoff to Debrief
-- Risk rating:
-- Final evidence bundle:
+- Final Access Chain:
+- C-I-A Impact Assessment (ISO 27001):

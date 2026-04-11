@@ -4,21 +4,23 @@ Date: YYYY-MM-DD
 Agent: rt-webops
 Scenario: <scenario-id>
 
-## Input from Recon
-- Hypothesis:
-- Target endpoint:
+## Application Analysis Heat Map Focus
+- File Uploads:
+- APIs:
+- Profile Sections:
+- Integrations:
+- Error Pages:
 
-## Test Execution
-- Test case:
-- Payload used:
-- Result:
-- Reproducible: yes/no
+## Exploitation Summary
+- Vulnerability tested:
+- PoC technique:
+- OWASP Category:
+- MITRE T-Code:
 
 ## Evidence
-- Request:
-- Response:
-- Screenshot/file:
+- Reproducible command (e.g. sqlmap, dalfox):
+- Request/Response snippet:
 
 ## Handoff to Access
-- Confirmed weakness:
-- Suggested impact validation:
+- Risk rating & C-I-A potential:
+- Recommended PrivEsc/Pivot actions:
