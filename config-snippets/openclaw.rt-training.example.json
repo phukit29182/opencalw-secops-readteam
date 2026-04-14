@@ -1,73 +1,174 @@
 {
-  "agents": {
-    "rt-lead": "REPLACE_PATH_RT_LEAD",
-    "rt-recon": "REPLACE_PATH_RT_RECON",
-    "rt-webops": "REPLACE_PATH_RT_WEBOPS",
-    "rt-access": "REPLACE_PATH_RT_ACCESS",
-    "rt-debrief": "REPLACE_PATH_RT_DEBRIEF"
-  },
   "gateway": {
-    "host": "0.0.0.0",
-    "port": 3310,
+    "mode": "local",
+    "port": 18789,
     "auth": {
-      "enabled": true,
+      "mode": "token",
       "token": "REPLACE_OPENCLAW_GATEWAY_TOKEN"
+    },
+    "bind": "lan",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "controlUi": {
+      "allowInsecureAuth": true,
+      "dangerouslyDisableDeviceAuth": true,
+      "allowedOrigins": [
+        "http://localhost:18789",
+        "http://127.0.0.1:18789",
+        "REPLACE_CONTROL_UI_ORIGIN"
+      ]
+    }
+  },
+  "agents": {
+    "list": [
+      {
+        "id": "rt-lead",
+        "agentDir": "REPLACE_PATH_RT_LEAD"
+      },
+      {
+        "id": "rt-recon",
+        "agentDir": "REPLACE_PATH_RT_RECON"
+      },
+      {
+        "id": "rt-webops",
+        "agentDir": "REPLACE_PATH_RT_WEBOPS"
+      },
+      {
+        "id": "rt-access",
+        "agentDir": "REPLACE_PATH_RT_ACCESS"
+      },
+      {
+        "id": "rt-debrief",
+        "agentDir": "REPLACE_PATH_RT_DEBRIEF"
+      }
+    ],
+    "defaults": {
+      "workspace": "/root/opencalw-secops-readteam/agents",
+      "models": {
+        "minimax-portal/MiniMax-M2.7": {
+          "alias": "minimax-m2.7"
+        },
+        "minimax-portal/MiniMax-M2.7-highspeed": {
+          "alias": "minimax-m2.7-highspeed"
+        }
+      },
+      "model": {
+        "primary": "minimax-portal/MiniMax-M2.7"
+      }
     }
   },
   "channels": {
     "telegram": {
       "enabled": true,
-      "pollIntervalMs": 1200,
-      "accounts": {
-        "main": {
-          "token": "REPLACE_TELEGRAM_BOT_TOKEN_MAIN",
-          "groups": {
-            "-100REPLACE_TRAINING_GROUP_ID": {
-              "groupPolicy": "allowlist",
-              "requireMention": false,
-              "allowFrom": [
-                "REPLACE_TRAINER_USER_ID"
-              ],
-              "topics": {
-                "REPLACE_TOPIC_ID_LEAD": {
-                  "agentId": "rt-lead"
-                },
-                "REPLACE_TOPIC_ID_RECON": {
-                  "agentId": "rt-recon"
-                },
-                "REPLACE_TOPIC_ID_WEBOPS": {
-                  "agentId": "rt-webops"
-                },
-                "REPLACE_TOPIC_ID_ACCESS": {
-                  "agentId": "rt-access"
-                },
-                "REPLACE_TOPIC_ID_DEBRIEF": {
-                  "agentId": "rt-debrief"
-                }
-              }
+      "groups": {
+        "-100REPLACE_TRAINING_GROUP_ID": {
+          "groupPolicy": "allowlist",
+          "requireMention": false,
+          "allowFrom": [
+            "REPLACE_TRAINER_USER_ID"
+          ],
+          "topics": {
+            "1": {
+              "agentId": "rt-lead"
+            },
+            "2": {
+              "agentId": "rt-recon"
+            },
+            "3": {
+              "agentId": "rt-webops"
+            },
+            "4": {
+              "agentId": "rt-access"
+            },
+            "5": {
+              "agentId": "rt-debrief"
             }
           }
         }
       },
-      "bindings": [
-        {
-          "accountId": "main",
-          "chatType": "private",
-          "agentId": "rt-lead"
-        }
-      ]
+      "botToken": "REPLACE_TELEGRAM_BOT_TOKEN_MAIN"
     }
   },
-  "tools": {
-    "agentToAgent": {
-      "enabled": true
+  "bindings": [
+    {
+      "type": "route",
+      "agentId": "rt-lead",
+      "match": {
+        "channel": "telegram",
+        "accountId": "REPLACE_TOPIC_ID_LEAD"
+      }
     },
-    "exec": {
-      "enabled": true,
-      "security": "full"
+    {
+      "type": "route",
+      "agentId": "rt-recon",
+      "match": {
+        "channel": "telegram",
+        "accountId": "REPLACE_TOPIC_ID_RECON"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "rt-webops",
+      "match": {
+        "channel": "telegram",
+        "accountId": "REPLACE_TOPIC_ID_WEBOPS"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "rt-access",
+      "match": {
+        "channel": "telegram",
+        "accountId": "REPLACE_TOPIC_ID_ACCESS"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "rt-debrief",
+      "match": {
+        "channel": "telegram",
+        "accountId": "REPLACE_TOPIC_ID_DEBRIEF"
+      }
     }
+  ],
+  "tools": {
+    "profile": "coding"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
   },
   "logging": {
     "level": "info"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.4.12",
+    "lastTouchedAt": "2026-04-14T07:31:42.648Z"
+  },
+  "models": {
+    "providers": {
+      "minimax-portal": {
+        "baseUrl": "https://api.minimax.io/anthropic",
+        "api": "anthropic-messages",
+        "authHeader": true,
+        "models": []
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "minimax-portal:default": {
+        "provider": "minimax-portal",
+        "mode": "oauth"
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "minimax": {
+        "enabled": true
+      }
+    }
   }
 }

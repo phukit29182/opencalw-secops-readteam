@@ -83,6 +83,7 @@ required_keys = [
     "REPLACE_TOPIC_ID_WEBOPS",
     "REPLACE_TOPIC_ID_ACCESS",
     "REPLACE_TOPIC_ID_DEBRIEF",
+    "REPLACE_CONTROL_UI_ORIGIN",
 ]
 
 values = {}
