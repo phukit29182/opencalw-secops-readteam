@@ -33,12 +33,14 @@ cd /path/to/openclaw-secops
 cp config-snippets/rt-training.env.example config-snippets/rt-training.env
 ```
 
-แก้ไฟล์ `config-snippets/rt-training.env` ให้ครบ 4 ค่า (ดูคำอธิบายใน `rt-training.env.example`):
+แก้ไฟล์ `config-snippets/rt-training.env` ให้ครบ 10 ค่า (ดูคำอธิบายใน `rt-training.env.example`):
 
 - `REPLACE_OPENCLAW_GATEWAY_TOKEN`
 - `REPLACE_TELEGRAM_BOT_TOKEN_MAIN`
 - `REPLACE_TRAINING_GROUP_ID` (เฉพาะตัวเลขหลัง `-100`)
 - `REPLACE_TRAINER_USER_ID`
+- `REPLACE_TOPIC_ID_...` (ค่าประจำห้อง x 5 ห้อง)
+- `REPLACE_CONTROL_UI_ORIGIN`
 
 ---
 
@@ -96,10 +98,10 @@ openclaw logs --follow
 
 ## 6) เริ่ม / ปิด Assessment Session + metrics (1–2 นาที)
 
-**เริ่ม session** (สร้าง `sessions/<วันที่-scenario>/session_state.json`):
+**เริ่ม session** (สร้าง Session และ Bootstrap Agent ทันที):
 
 ```bash
-./scripts/init-session.sh web-lab-sqli-basic
+./scripts/init-agents.sh web-lab-sqli-basic http://target-web.local
 ```
 
 จด `session_id` ที่สคริปต์พิมพ์ออกมา (เช่น `2026-03-30-web-lab-sqli-basic`)

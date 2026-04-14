@@ -49,7 +49,7 @@
 ```bash
 # 1. เตรียมค่า config
 cp config-snippets/rt-training.env.example config-snippets/rt-training.env
-# (กรอก 9 ค่า: Gateway Token, Bot Token, Group ID, User ID, และ 5 Topic IDs)
+# (กรอก 10 ค่า: Gateway Token, Bot Token, Group ID, User ID, 5 Topic IDs และ Control UI Origin)
 
 # 2. Generate config
 ./scripts/instantiate-config.sh --force
@@ -62,9 +62,9 @@ openclaw channels status --probe
 
 ---
 
-## วิธีหาค่า Config ทั้ง 9 ตัว (Telegram Setup)
+## วิธีหาค่า Config ทั้ง 10 ตัว (Telegram Setup)
 
-ระบบต้องการค่า 9 ตัวเพื่อกรอกลงในไฟล์ `rt-training.env` ดังนี้:
+ระบบต้องการค่า 10 ตัวเพื่อกรอกลงในไฟล์ `rt-training.env` ดังนี้:
 
 **1. Gateway Token (`REPLACE_OPENCLAW_GATEWAY_TOKEN`)**
 - หยาจาก: ไม่ต้องหา **ตั้งขึ้นเองได้เลย** เป็นรหัสผ่าน (ตัวอักษรผสมตัวเลขยาวๆ) เพื่อเชื่อมต่อระบบภายใน ไม่ให้อนุญาตใครแอบเข้ามารัน Agent
@@ -88,6 +88,9 @@ openclaw channels status --probe
 - เข้าไปแชท **"ข้างในแต่ละ Topic"** แล้วพิมพ์ข้อความเรียกบอท `@getidsbot`
 - เมื่อบอทตอบกลับ ให้ดูที่บรรทัด `Message Thread ID:` (เช่น ห้อง Recon ตอบเลข `4`)
 - นำเลขที่ได้ไปกรอกให้ตรงตามแต่ละห้อง (ห้องแรกสุดมักจะเป็นเลข `1` เสมอ)
+
+**10. Control UI Origin (`REPLACE_CONTROL_UI_ORIGIN`)**
+- กำหนด URL สำหรับเข้าหน้ากระดาน Control (เช่น `http://[IP_ADDRESS]`)
 
 ---
 
